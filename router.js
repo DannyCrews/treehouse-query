@@ -1,11 +1,12 @@
 var Profile = require('./profile');
+var renderer = require('./renderer');
 
 var home = (req, res) => {
   if (req.url === '/') {
   //      show search
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
-    res.write('Header\n');
+    renderer.view('header', {}, res);
     res.write('Search\n');
     res.end('Footer\n');
   }
@@ -31,7 +32,7 @@ var user = (req, res) => {
         badges: profileJSON.badges.length,
         javascriptPoints: profileJSON.points.JavaScript
       };
-      res.write(values.username + ' has ' + values.badges +' badeges\n');
+      res.write(values.username + ' has ' + values.badges +' badges\n');
       res.end('Footer\n');
     });
 
