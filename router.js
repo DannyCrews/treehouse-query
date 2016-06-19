@@ -1,17 +1,25 @@
 var Profile = require('./profile');
 var renderer = require('./renderer');
+var querystring = require('querystring');
 
 var home = (req, res) => {
   if (req.url === '/') {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/html');
-    renderer.view('header', {}, res);
-    renderer.view('search', {}, res);
-    renderer.view('footer', {}, res);
-    res.end();
+    if (req.method.toLowerCase() ==='get') {
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'text/html');
+      renderer.view('header', {}, res);
+      renderer.view('search', {}, res);
+      renderer.view('footer', {}, res);
+      res.end();
+    } else {
+      req.on('data', function(postBody) {
+        var query = querystring.parse(postBody.toString());
+        res.statusCode = 303;
+        res.setHeader('Location', '/' + query.username);
+        res.end();
+      });
+    }
   }
-  //    if url == / and POST
-  //      redirect to /:username
 };
 
 // 3. Handle HTTP route GET /:username
