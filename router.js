@@ -1,4 +1,5 @@
-// 2. Handle HTTP route GET / and POST / i.e. Home
+var Profile = require('./profile');
+
 var home = (req, res) => {
   if (req.url === '/') {
   //      show search
@@ -19,16 +20,30 @@ var user = (req, res) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
     res.write('Header\n');
-    res.write(username + '\n');
-    res.end('Footer\n');
+
+    var studentProfile = new Profile(username);
+
+    studentProfile.on('end', function(profileJSON) {
+      // show profile
+      var values = {
+        avatarUrl: profileJSON.gravatar_url,
+        username: profileJSON.profile_name,
+        badges: profileJSON.badges.length,
+        javascriptPoints: profileJSON.points.JavaScript
+      };
+      res.write(values.username + ' has ' + values.badges +' badeges\n');
+      res.end('Footer\n');
+    });
+
+    studentProfile.on('error', function(error) {
+      //show error
+      res.end('Footer\n');
+
+    });
+    
   }
 };
-//    if url == /:username
-//      get json from treehouse
-//        on 'end'
-//          show profile
-//        on 'error'
-//          show error
+
 module.exports = {
   'home': home,
   'user': user
