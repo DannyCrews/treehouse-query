@@ -37,6 +37,7 @@ var user = (req, res) => {
 
     studentProfile.on('error', function(error) {
       //show error
+      res.write(error.message + '\n');
       res.end('Footer\n');
 
     });
