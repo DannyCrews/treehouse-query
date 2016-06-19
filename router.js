@@ -3,12 +3,12 @@ var renderer = require('./renderer');
 
 var home = (req, res) => {
   if (req.url === '/') {
-  //      show search
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
     renderer.view('header', {}, res);
-    res.write('Search\n');
-    res.end('Footer\n');
+    renderer.view('search', {}, res);
+    renderer.view('footer', {}, res);
+    res.end();
   }
   //    if url == / and POST
   //      redirect to /:username
@@ -20,7 +20,8 @@ var user = (req, res) => {
   if (username.length > 0) {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
-    res.write('Header\n');
+    renderer.view('header', {}, res);
+    res.end();
 
     var studentProfile = new Profile(username);
 
@@ -32,15 +33,17 @@ var user = (req, res) => {
         badges: profileJSON.badges.length,
         javascriptPoints: profileJSON.points.JavaScript
       };
-      res.write(values.username + ' has ' + values.badges +' badges\n');
-      res.end('Footer\n');
+      renderer.view('profile', values, res);
+      renderer.view('footer', {}, res);
+      res.end();
     });
 
     studentProfile.on('error', function(error) {
       //show error
-      res.write(error.message + '\n');
-      res.end('Footer\n');
-
+      renderer.view('error', {errorMessage: error.message}, res);
+      renderer.view('search', {}, res);
+      renderer.view('footer', {}, res);
+      res.end();
     });
     
   }
