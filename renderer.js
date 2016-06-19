@@ -10,7 +10,7 @@ function mergeValues(values, content) {
 
 function view(templateName, values, res) {
   var fileContent = fs.readFileSync('./views/' + templateName + '.html', {encoding: 'utf8'});
-  fileContents = mergeValues(values, fileContents);
+  fileContent = mergeValues(values, fileContent);
   res.write(fileContent);
 
 }

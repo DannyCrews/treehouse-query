@@ -4,7 +4,7 @@ var renderer = require('./renderer');
 var home = (req, res) => {
   if (req.url === '/') {
     res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
+    res.setHeader('Content-Type', 'text/html');
     renderer.view('header', {}, res);
     renderer.view('search', {}, res);
     renderer.view('footer', {}, res);
@@ -19,9 +19,9 @@ var user = (req, res) => {
   var username = req.url.replace('/', '');
   if (username.length > 0) {
     res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
+    res.setHeader('Content-Type', 'text/html');
     renderer.view('header', {}, res);
-    res.end();
+    // res.end();
 
     var studentProfile = new Profile(username);
 
